@@ -18,3 +18,11 @@ ansible 2.9.6
 jbowman@utils:~/cml-ansible$
 ```
 
+## Tested Platforms
+
+Tested using Cisco Modeling Labs.
+
+IOS Router ---> IOSv 15.8(3)
+IOS Switch ---> IOSv L2 2019
+NXOS Switch ---> NXOS 9.2.3
+
