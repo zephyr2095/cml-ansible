@@ -20,9 +20,11 @@ jbowman@utils:~/cml-ansible$
 
 ## Tested Platforms
 
-Tested using Cisco Modeling Labs.
+Tested using Cisco Modeling Labs:
+  * IOS Router ---> IOSv 15.8(3)
+  * IOS Switch ---> IOSv L2 2019
+  * NXOS Switch ---> NXOS 9.2.3
 
-IOS Router ---> IOSv 15.8(3)
-IOS Switch ---> IOSv L2 2019
-NXOS Switch ---> NXOS 9.2.3
+## Toplogy
 
+![atl text](https://github.com/zephyr2095/cml-ansibleimages/CML-Ansible-diagram.jpg)
