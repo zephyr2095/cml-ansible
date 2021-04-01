@@ -27,4 +27,4 @@ Tested using Cisco Modeling Labs:
 
 ## Toplogy
 
-![atl text](https://github.com/zephyr2095/cml-ansibleimages/CML-Ansible-diagram.jpg)
+(https://github.com/zephyr2095/cml-ansible/images/CML-Ansible-diagram.jpg)
