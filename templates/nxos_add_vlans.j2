@@ -1,0 +1,6 @@
+{# Template for adding VLANs to Cisco NXOS #}
+
+{% for vlan in vlans %}
+vlan {{ vlan.vlan_id }}
+ name {{ vlan.vlan_name }}
+{% endfor %}

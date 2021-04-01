@@ -1,0 +1,13 @@
+---
+# Push config to device using nxos_config
+# Register variable for output of config applied to device
+# Set notify handler if changes are made
+
+- name: "PUSH CONFIGURATION TO DEVICE USING NXOS_CONFIG"
+  nxos_config:
+    src: "configs/{{ inventory_hostname }}_vlan.txt"
+  register: "NXOS_VLAN_CONFIG"
+  when: ansible_network_os == "nxos"
+  changed_when: "NXOS_VLAN_CONFIG.updates is defined"
+  notify: "NXOS VLAN UPDATES"
+...

@@ -1,0 +1,14 @@
+---
+# Gather Facts playbook
+
+- name: "GATHER FACTS PLAYBOOK"
+  hosts: all
+  gather_facts: yes
+
+  tasks:
+  - name: "PRINT OS AND MODEL"
+    debug:
+      msg: 
+        - "OS Version: {{ ansible_net_version }}"
+        - "Model: {{ ansible_net_model }}"
+...

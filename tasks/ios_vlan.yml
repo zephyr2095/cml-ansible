@@ -1,0 +1,13 @@
+---
+# Push config to IOS devices using ios_config module
+# Register variable for output of config applied to device
+# Set notify handler if changes are made
+
+- name: "PUSH CONFIGURATION TO DEVICE USING IOS_CONFIG"
+  ios_config:
+    src: "configs/{{ inventory_hostname }}_vlan.txt"
+  register: "IOS_VLAN_CONFIG"
+  when: ansible_network_os == "ios"
+  changed_when: "IOS_VLAN_CONFIG.updates is defined"
+  notify: "IOS VLAN UPDATES"
+...

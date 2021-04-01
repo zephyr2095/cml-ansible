@@ -1,0 +1,12 @@
+---
+# Generate config file using J2 templates
+# Configuration is generated based off device type
+
+- name: "GENERATE CONFIGURATION USING JINJA2 TEMPLATE"
+  template:
+    src: "templates/{{ ansible_network_os }}_add_vlans.j2"
+    dest: "configs/{{ inventory_hostname }}_vlan.txt"
+  changed_when: false
+  tags:
+  - gen_config
+...

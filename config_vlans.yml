@@ -1,0 +1,46 @@
+---
+# Playbook to configure VLANs on Cisco IOS and NXOS devices
+# Configuration will be generated using J2 template and pushed to device(s)
+# Handlers are used to print configuration applied to devices (nothing is printed if no config is changed)
+
+- name: "ADD VLANS"
+  hosts: switches
+
+  tasks:
+  - name: "GENERATE CONFIGURATION USING JINJA2 TEMPLATE"
+    template:
+      src: "templates/{{ ansible_network_os }}_add_vlans.j2"
+      dest: "configs/{{ inventory_hostname }}_vlan.txt"
+    changed_when: false
+
+  - name: "PUSH CONFIGURATION TO DEVICE USING IOS_CONFIG"
+    ios_config:
+      src: "configs/{{ inventory_hostname }}_vlan.txt"
+    register: "IOS_VLAN_CONFIG"
+    when: ansible_network_os == "ios"
+    changed_when: "IOS_VLAN_CONFIG.updates is defined"
+    notify: "IOS VLAN UPDATES"
+  
+  - name: "PUSH CONFIGURATION TO DEVICE USING NXOS_CONFIG"
+    nxos_config:
+      src: "configs/{{ inventory_hostname }}_vlan.txt"
+    register: "NXOS_VLAN_CONFIG"
+    when: ansible_network_os == "nxos"
+    changed_when: "NXOS_VLAN_CONFIG.updates is defined"
+    notify: "NXOS VLAN UPDATES"
+  
+  - name: "CLEANUP TEMP CONFIGURATION FILES"
+    file:
+      path: "./configs/{{ inventory_hostname }}_vlan.txt"
+      state: absent
+    changed_when: false
+
+  handlers:
+    - name: "IOS VLAN UPDATES"
+      debug:
+        var: IOS_VLAN_CONFIG.updates
+    
+    - name: "NXOS VLAN UPDATES"
+      debug:
+        var: NXOS_VLAN_CONFIG.updates
+...

@@ -1,0 +1,94 @@
+---
+# Playbook to configure NXOS version 7.0(3)I7(9)
+
+- name: "PLAYBOOK TO CONFIGURE NXOS VERSION 7.0(3)I7(9)"
+  hosts: nxos_switches
+
+  tasks:
+  - name: "CONFIGURE HOSTNAME"
+    cisco.nxos.nxos_system:
+      hostname: "{{ inventory_hostname }}"
+
+  - name: "ENABLE FEATURES"
+    cisco.nxos.nxos_feature:
+      feature: "{{ item.feature }}"
+      state: enabled
+    with_items:
+      - "{{ features }}"
+
+  - name: "CONFIGURE ANYCAST GATEWAY"
+    cisco.nxos.nxos_overlay_global:
+      anycast_gateway_mac: "{{ anycast_gateway_mac }}"
+    register: "ANYCAST_OUTPUT"
+
+  - name: "CONFIGURE LOOPBACK INTERFACES"
+    cisco.nxos.nxos_interfaces:
+      config:
+        - name: "{{ item.interface }}"
+          description: "{{ item.description }}"
+    with_items:
+      - "{{ loopbacks }}"
+
+  - name: "CONFIGURE LOOPBACK L3 INTERFACES"
+    cisco.nxos.nxos_l3_interfaces:
+      config:
+        - name: "{{ item.interface }}"
+          ipv4:
+          - address: "{{ item.ip_addr }}"
+    with_items:
+      - "{{ loopbacks }}"  
+ 
+  - name: "CONFIGURE L3 INTERFACES"
+    cisco.nxos.nxos_interfaces:
+      config:
+        - name: "{{ item.interface }}"
+          description: "{{ item.description }}"
+          mtu: "9216"
+          mode: layer3
+          enabled: true
+    with_items:
+      - "{{ l3_interfaces }}"
+
+  - name: "CONFIGURE L3 IP UNNUMBERED"
+    cisco.nxos.nxos_config:
+      lines:
+      - "medium p2p"
+      - "ip unnumbered loopback0"
+      parents: "interface {{ item.interface }}"
+    with_items:
+      - "{{ l3_interfaces }}"
+
+  - name: "CONFIGURE OSPFV2"
+    cisco.nxos.nxos_ospfv2:
+      config:
+        processes: 
+        - process_id: "{{ ospf_process_id }}"
+          router_id: "{{ ospf_router_id }}"
+          areas:
+          - area_id: "{{ ospf_area }}"
+            authentication:
+              set: no
+          auto_cost:
+            reference_bandwidth: 100
+            unit: Gbps
+          log_adjacency_changes:
+            log: yes
+
+  - name: "CONFIGURE OSPF L3 INTERFACES"
+    cisco.nxos.nxos_config:
+      lines:
+      - "ip ospf network point-to-point"
+      - "ip router ospf {{ ospf_process_id }} area {{ ospf_area }}"
+      parents: "interface {{item.interface }}"
+    with_items:
+       - "{{ l3_interfaces }}"
+   
+  - name: "CONFIGURE OSPF LOOPBACK INTERFACES"
+    cisco.nxos.nxos_config:
+      lines:
+      - "ip router ospf {{ ospf_process_id }} area {{ ospf_area }}"
+      parents: "interface {{item.interface }}"
+    with_items:
+      - "{{ loopbacks }}"
+
+...

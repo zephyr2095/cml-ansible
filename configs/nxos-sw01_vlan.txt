@@ -1,0 +1,6 @@
+!
+vlan 100
+ name TenantA_Accounting
+vlan 200
+ name TenantB_Sales
+!

@@ -1,0 +1,34 @@
+---
+# Playbook to configure VLANs on NXOS using nxos-vlans-module
+
+- name: "CONFIGURE NXOS USING ANSIBLE MODULES"
+  hosts: nxos_switches
+
+  tasks:
+  - name: "ENABLE FEATURES WITH nxos_feature "
+    nxos_feature:
+      feature: "{{ item.feature }}"
+      state: enabled
+    with_items:
+      - "{{ features }}"
+  
+  - name: "ENABLE FABRIC FORWARDING WITH nxos_config"
+    nxos_config:
+      lines:
+        - feature fabric forwarding
+        - nv overlay evpn
+  
+  - name: "CONFIGURE ANYCAST GATEWAY WITH nxos_overlay_global_module"
+    nxos_overlay_global:
+      anycast_gateway_mac: "{{ anycast_gateway_mac }}"
+
+  - name: "ADD VLANS WITH nxos_vlans_module"
+    nxos_vlans:
+      config:
+        - vlan_id: "{{ item.vlan_id }}"
+          mapped_vni: "{{ item.vni_id }}"
+          name: "{{ item.vlan_name }}"
+    with_items:
+    - "{{ vlans }}"
+
+...

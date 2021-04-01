@@ -1,0 +1,9 @@
+---
+# Clean up temp config files
+
+- name: "CLEANUP TEMP CONFIGURATION FILES"
+  file:
+    path: "./configs/{{ inventory_hostname }}_vlan.txt"
+    state: absent
+  changed_when: false
+...

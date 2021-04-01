@@ -1,0 +1,28 @@
+---
+# Playbook to backup device configurations
+# Will save configurations to "backup" directory
+
+- name: "BACKUP DEVICE CONFIGURATIONS PLAYBOOK"
+  hosts: all
+
+  tasks:
+  - name: "CREATE BACKUPS DIRECTORY"
+    file:
+      path: "backups"
+      state: "directory"
+    changed_when: false
+  
+  - name: "BACKUP IOS DEVICE CONFIGURATION"
+    ios_config:
+      backup: "yes"
+      backup_options:
+        dir_path: "backups"
+    when: ansible_network_os == "ios"
+
+  - name: "BACKUP NXOS DEVICE CONFIGURATION"
+    nxos_config:
+      backup: "yes"
+      backup_options:
+        dir_path: "backups"
+    when: ansible_network_os == "nxos"
+...

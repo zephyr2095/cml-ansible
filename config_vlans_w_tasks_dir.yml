@@ -1,0 +1,33 @@
+---
+# Playbook to configure VLANs on Cisco IOS and NXOS devices
+
+- name: "ADD VLANS"
+  hosts: switches
+
+  tasks:
+    # Include task to generate configuration
+    - name: "GENERATE CONFIGURATION"
+      include_tasks: "tasks/gen_vlan_template.yml"
+      tags:
+      - gen_config
+  
+    # Include task to push configuration to device(s)
+    # This is based off device type
+    - name: "PUSH CONFIG"
+      include_tasks: "tasks/{{ ansible_network_os }}_vlan.yml"
+  
+    # Include task to cleanup temp config files
+    - name: "CLEANUP TEMP FILES"
+      include_tasks: "tasks/cleanup.yml"
+  
+  handlers:
+    # Print config applied to devices if any changes made
+    - name: "IOS VLAN UPDATES"
+      debug:
+        var: IOS_VLAN_CONFIG.updates
+    
+    # Print config applied to devices if any changes made
+    - name: "NXOS VLAN UPDATES"
+      debug:
+        var: NXOS_VLAN_CONFIG.updates
+...

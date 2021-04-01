@@ -1,0 +1,16 @@
+---
+# R1 host_var file
+
+vrfs:
+  - { vrf: Tenant-A, rd: "100:1" }
+  - { vrf: Tenant-B, rd: "200:1" }
+
+static_routes:
+  - { ip_addr: 10.100.1.0, mask: 255.255.255.0, next_hop: 10.100.1.1, vrf: Tenant-A}
+  - { ip_addr: 10.200.1.0, mask: 255.255.255.0, next_hop: 10.200.1.1, vrf: Tenant-B}
+
+interfaces:
+  - { interface: GigabitEthernet0/1, tag: 100, ip_addr: 10.100.1.100, mask: 255.255.255.0, vrf: Tenant-A }
+  - { interface: GigabitEthernet0/1, tag: 200, ip_addr: 10.200.1.100, mask: 255.255.255.0, vrf: Tenant-B }
+
+...
