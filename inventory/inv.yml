@@ -16,11 +16,10 @@ all:
               ansible_host: 192.168.1.200
         
         nxos_switches:
-          hosts:
-            nxos-sw01:
-              ansible_host: 192.168.1.202
-            nxos-sw02:
-              ansible_host: 192.168.1.203
-            nxos-sw03:
-              ansible_host: 192.168.1.204
+              hosts:
+                nxos-sw01:
+                  ansible_host: 192.168.1.202
+                nxos-sw02:
+                  ansible_host: 192.168.1.203
+
 ...
